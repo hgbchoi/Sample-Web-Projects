@@ -1,0 +1,124 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+
+body {
+font-family:arial;
+}
+
+nav{
+
+margin-top:5px;
+margin-left:5px;
+
+}
+ul{
+display:inline;
+list-style-type: none;
+}
+
+ul li {
+
+display:inline;
+
+}
+nav ul li a{
+padding:5px;
+text-decoration:none;
+color:#333;
+}
+nav ul li a:hover{
+
+text-decoration:underline;
+
+}
+
+h1{
+  width:270px;
+  height:89px;
+  margin: 0 auto;
+  background: url(glogo.png);
+  background-repeat: no-repeat;
+  text-indent:-9999px;
+  background-size:100%;
+}
+
+#container{
+
+  width:580px;
+  margin: 300px auto 0 ;
+  text-align:center;
+
+}
+
+input[type ="text"]{
+
+width:580px;
+padding:5px;
+margin-top:15px;
+margin-bottom:10px;
+
+}
+
+input[type ="submit"]{
+
+  font-weight:bold;
+  padding:5px;
+  margin: 10px 5px 0px;
+}
+
+footer {
+position:fixed;
+width: 100%;
+background:#eee;
+bottom: 0;
+
+}
+
+footer nav ul {
+
+  float:left;
+  padding-top:7px;
+  padding-bottom:7px;
+
+}
+
+footer nav ul.footer-right{
+
+float:right;
+padding-top:7px;
+padding-bottom:7px;
+
+}
+
+header {
+position:fixed;
+width: 100%;
+background:#eee;
+top: 0;
+
+
+}
+header nav ul {
+
+  float:left;
+  padding-top:7px;
+  padding-bottom:7px;
+
+}
+
+header nav ul.header-right{
+
+float:right;
+padding-top:7px;
+padding-bottom:7px;
+
+}
+
+#signin{
+background:#0ee;
+padding:5px;
+
+}
