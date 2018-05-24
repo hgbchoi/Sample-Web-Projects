@@ -1,0 +1,93 @@
+*{
+  margin: 0;
+  padding :0;
+}
+
+body{
+  width:100%;
+  background-color:#AAA;
+  text-align:center;
+}
+
+div{display:block;}
+.MainText{
+  padding-top:100px;
+  font-size:50px;
+  font-family:sans-serif;
+}
+
+.DiceContainer{
+  height:250px;
+  width:100%;
+
+  background-color:white;
+  margin-top:200px;
+}
+
+.Dice{
+  height:150px;
+  width:150px;
+  position:relative;
+  border-radius:7px;
+  margin:50px;
+  background-color:blue;
+  display:inline-block;
+
+}
+
+.Dot{
+    position: absolute;
+    background-color:white;
+    height:30px;
+    width:30px;
+    border-radius:50%;
+
+}
+
+.Dot-one {
+
+  top: 15px;
+  left: 15px;
+
+}
+
+.Dot-two {
+
+top: 60px;
+left: 15px;
+
+}
+
+.Dot-three{
+  top:110px;
+  left:15px;
+}
+
+.Dot-four{
+  top: 15px;
+  right:15px;
+}
+
+.Dot-five{
+  top: 60px;
+  right:15px;
+}
+.Dot-six{
+  top: 110px;
+  right:15px;
+}
+.Dot-seven{
+  top: 60px;
+  right:60px;
+  display:none;
+}
+
+
+.myBtn{
+  margin-top: 100px;
+  padding: 30px 50px 30px 50px;
+
+  border-radius: 30px;
+  background-color:green;
+  font-size:15px;
+}
