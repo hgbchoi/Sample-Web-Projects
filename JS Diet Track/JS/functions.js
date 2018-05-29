@@ -13,6 +13,37 @@ while (dropDownList.hasChildNodes()) {
 
 }
 
+function drawChart(){
+
+var name = document.getElementById('userDropDown').value;
+var chart = document.getElementById('chart');
+var dataEntries = JSON.parse(localStorage.getItem(name));
+var dateEntries = [];
+var weightEntries = [];
+
+for (var i = 0; i < dataEntries.length; i++){
+  dateEntries.push(dataEntries[i].date);
+  weightEntries.push(dataEntries[i].weight);
+}
+
+let lineChart = new Chart(chart, {
+  type: 'line',
+  data:{
+    labels: dateEntries,
+    datasets:[
+      {
+
+        label: name,
+        fill: false,
+        data: weightEntries
+    }
+  ]
+  }
+}
+)
+
+}
+
 function deleteUser(){
   var dropDownList = document.getElementById('userDropDown');
   var userToDelete = dropDownList.value;
@@ -69,6 +100,7 @@ function loadEntries(){
       cell4.innerHTML = '<input type = "button" onclick="deleteEntry(\''+ entries[i].id +'\')" class="btn btn-danger" value = "Delete">';
 
 }
+drawChart();
 }
 
 
