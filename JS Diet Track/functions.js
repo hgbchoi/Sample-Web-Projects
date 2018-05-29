@@ -1,3 +1,26 @@
+function loadUsers(){
+var dropDownList = document.getElementById('userDropDown');
+while (dropDownList.hasChildNodes()) {
+  dropDownList.removeChild(dropDownList.firstChild);
+}
+  for (var i = 0; i < localStorage.length; i++){
+    var newOption = document.createElement("option");
+        newOption.text = localStorage.key(i);
+        newOption.value = localStorage.key(i);
+        dropDownList.appendChild(newOption)
+  }
+
+
+}
+
+function deleteUser(){
+  var dropDownList = document.getElementById('userDropDown');
+  var userToDelete = dropDownList.value;
+  localStorage.removeItem(userToDelete);
+
+  loadUsers();
+}
+
 function saveEntry(){
   var name = document.getElementById('name').value;
   var weight = document.getElementById('weight').value;
@@ -20,7 +43,7 @@ function saveEntry(){
     existingEntries.push(newEntry);
     localStorage.setItem(name, JSON.stringify(existingEntries));
   }
-
+loadUsers();
 }
 
 function loadEntries(){
@@ -32,7 +55,7 @@ function loadEntries(){
     '<th>Functions</th>' +
      '</thead>';
   var entries = [];
-  var name = document.getElementById('loadEntriesName').value;
+  var name = document.getElementById('userDropDown').value;
   entries = JSON.parse(localStorage.getItem(name));
   for (var i = 0; i < entries.length; i ++){
       var newRow = table.insertRow(table.length),
@@ -45,11 +68,13 @@ function loadEntries(){
       cell3.innerHTML = entries[i].date;
       cell4.innerHTML = '<input type = "button" onclick="deleteEntry(\''+ entries[i].id +'\')" class="btn btn-danger" value = "Delete">';
 
+}
+}
 
-}
-}
+
+
 function deleteEntry(id){
-  var name = document.getElementById('loadEntriesName').value;
+  var name = document.getElementById('userDropDown').value;
   var entries = JSON.parse(localStorage.getItem(name));
   for (var i = 0; i < entries.length; i++){
   if (id == entries[i].id)  {
@@ -60,7 +85,8 @@ function deleteEntry(id){
 }
 }
 
-
+var deleteUserButton = document.getElementById('deleteUserButton');
+deleteUserButton.addEventListener("click", deleteUser);
 var addEntriesButton = document.getElementById('addEntryButton');
 addEntriesButton.addEventListener("click", saveEntry);
 var loadEntriesButton = document.getElementById('loadEntriesButton');
