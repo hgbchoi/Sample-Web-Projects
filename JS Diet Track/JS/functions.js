@@ -73,6 +73,10 @@ function saveEntry(){
   var name = document.getElementById('name').value;
   var weight = document.getElementById('weight').value;
   var date = document.getElementById('date').value;
+  var breakfast = document.getElementById('breakfastInput').value.replace(/\r?\n/g, '<br />');
+  var lunch = document.getElementById('lunchInput').value.replace(/\r?\n/g, '<br />');
+  var dinner = document.getElementById('dinnerInput').value.replace(/\r?\n/g, '<br />');
+  var exercise = document.getElementById('exerciseInput').value.replace(/\r?\n/g, '<br />');
   var issueId = chance.guid();
   var existsFlag = false;
 
@@ -82,16 +86,25 @@ function saveEntry(){
   var newEntry = {
     name:name,
     "data":[{
+      id: issueId,
       weight: weight,
       date: date,
-      id: issueId
+      breakfast: breakfast,
+      lunch: lunch,
+      dinner: dinner,
+      exercise: exercise
+
     }]
   };
 
  var rawData = {
    weight: weight,
    date: date,
-   id: issueId
+   id: issueId,
+   breakfast: breakfast,
+   lunch: lunch,
+   dinner: dinner,
+   exercise: exercise
  }
 
 
@@ -142,14 +155,13 @@ function loadEntries(){
       cell2.innerHTML = entries[index]['data'][i].weight;
       cell3.innerHTML = entries[index]['data'][i].date;
       cell4.innerHTML = '<input type = "button" onclick="deleteEntry(\''+ entries[index]['data'][i].id +'\')" class="btn btn-danger" value = "Delete">'+
-                        '<input type = "button" onclick="displayDetails(\''+ entries[index]['data'][i].id +'\')" class="btn btn-primary buttonMargin" value = "Details">';
+                        '<input type = "button" onclick="displayDetails(\''+ entries[index]['data'][i].id +'\')" class="btn btn-primary buttonMargin" value = "Details" data-toggle="modal" data-target="#detailsModal">';
 
 
 }
 drawChart();
 }
 }
-
 
 
 function deleteEntry(id){
@@ -173,7 +185,24 @@ function getCurrentDate(){
 
 function displayDetails(id){
 
+  var entries = JSON.parse(localStorage.getItem(TRACKER_USERS));
+  var modalBody = document.getElementById('detailsModalBody');
+  var selectedEntry = ''
+  for (var i = 0; i < entries.length; i++){
+    for (var j = 0; j < entries[i]["data"].length; j++){
+  if (id == entries[i]["data"][j].id)  {
+    selectedEntry = entries[i]["data"][j];
+  }
+modalBody.innerHTML = "<h5>Breakfast</h5><p>" + selectedEntry['breakfast'] + "</p>"
+                      + "<h5>Lunch</h5><p>" + selectedEntry['lunch'] + "</p>"
+                      + "<h5>Dinner</h5><p>" + selectedEntry['dinner'] + "</p>"
+                      + "<h5>Exercise Routine</h5><p>" + selectedEntry['exercise'] + "</p>";
+
+
+  }
 }
+}
+
 var todayButton = document.getElementById('todayButton');
 todayButton.addEventListener("click", getCurrentDate);
 var deleteUserButton = document.getElementById('deleteUserButton');
