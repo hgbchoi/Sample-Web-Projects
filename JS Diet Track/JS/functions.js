@@ -1,5 +1,12 @@
 var TRACKER_USERS = "trackerUsers";
 
+function checkNoUserSelected(){
+var dropDownList = document.getElementById('userDropDown');
+if (dropDownList.value == ''){
+  return true;
+}
+}
+
 function loadUsers(){
 var dropDownList = document.getElementById('userDropDown');
 while (dropDownList.hasChildNodes()) {
@@ -67,33 +74,53 @@ function deleteUser(){
   entries.splice(index,1);
   localStorage.setItem(TRACKER_USERS, JSON.stringify(entries));
   loadUsers();
+  if (checkNoUserSelected()){
+    var table = document.getElementById('entryTable');
+    var chart = document.getElementById('chart');
+    chart.style.display = 'none';
+    table.innerHTML ='';
+  }
+
 }
 
 function saveEntry(){
   var name = document.getElementById('name').value;
+  var tempSelectedUser = document.getElementById('userDropDown').value;
   var weight = document.getElementById('weight').value;
   var date = document.getElementById('date').value;
+  var breakfast = document.getElementById('breakfastInput').value.replace(/\r?\n/g, '<br />');
+  var lunch = document.getElementById('lunchInput').value.replace(/\r?\n/g, '<br />');
+  var dinner = document.getElementById('dinnerInput').value.replace(/\r?\n/g, '<br />');
+  var exercise = document.getElementById('exerciseInput').value.replace(/\r?\n/g, '<br />');
   var issueId = chance.guid();
   var existsFlag = false;
 
-  if(name == '' || name == null, weight == '' || weight == null || date == '' || date == null){
+  if(name == '' || name == null || weight == '' || weight == null || date == '' || date == null || breakfast == '' || breakfast == null || lunch == '' || lunch == null || dinner == '' || dinner == null || exercise == '' || exercise == null){
     alert('Please fill  in all fields');
   }else{
   var newEntry = {
     name:name,
     "data":[{
+      id: issueId,
       weight: weight,
       date: date,
-      id: issueId
+      breakfast: breakfast,
+      lunch: lunch,
+      dinner: dinner,
+      exercise: exercise
+
     }]
   };
 
  var rawData = {
    weight: weight,
    date: date,
-   id: issueId
+   id: issueId,
+   breakfast: breakfast,
+   lunch: lunch,
+   dinner: dinner,
+   exercise: exercise
  }
-
 
   if (localStorage.getItem(TRACKER_USERS) == null){
     var entries = [];
@@ -114,16 +141,23 @@ function saveEntry(){
     localStorage.setItem(TRACKER_USERS, JSON.stringify(existingEntries));
   }
 loadUsers();
+if (tempSelectedUser != null, tempSelectedUser != ''){
+document.getElementById('userDropDown').value = tempSelectedUser
+loadEntries();
+}
 }
 }
 
 
 function loadEntries(){
   var table = document.getElementById('entryTable');
+  var chart = document.getElementById('chart');
   var entries = [];
   var name = document.getElementById('userDropDown').value;
   entries = JSON.parse(localStorage.getItem(TRACKER_USERS));
+  var index = entries.findIndex(obj => obj.name == name);
   if (entries.length > 0){
+    if (entries[index]['data'].length > 0){
   table.innerHTML = '<thead>'+
     '<th>Name</th>'+
     '<th>Weight</th>'+
@@ -131,7 +165,7 @@ function loadEntries(){
     '<th>Functions</th>' +
      '</thead>';
 
-  var index= entries.findIndex(obj => obj.name == name);
+
   for (var i = 0; i < entries[index]["data"].length; i ++){
       var newRow = table.insertRow(table.length),
       cell1 = newRow.insertCell(0),
@@ -142,14 +176,20 @@ function loadEntries(){
       cell2.innerHTML = entries[index]['data'][i].weight;
       cell3.innerHTML = entries[index]['data'][i].date;
       cell4.innerHTML = '<input type = "button" onclick="deleteEntry(\''+ entries[index]['data'][i].id +'\')" class="btn btn-danger" value = "Delete">'+
-                        '<input type = "button" onclick="displayDetails(\''+ entries[index]['data'][i].id +'\')" class="btn btn-primary buttonMargin" value = "Details">';
+                        '<input type = "button" onclick="displayDetails(\''+ entries[index]['data'][i].id +'\')" class="btn btn-primary buttonMargin" value = "Details" data-toggle="modal" data-target="#detailsModal">';
 
 
 }
+
+chart.style.display = 'block';
 drawChart();
 }
+else {
+  chart.style.display = 'none';
+  table.innerHTML ='';
 }
-
+}
+}
 
 
 function deleteEntry(id){
@@ -173,7 +213,23 @@ function getCurrentDate(){
 
 function displayDetails(id){
 
+  var entries = JSON.parse(localStorage.getItem(TRACKER_USERS));
+  var modalBody = document.getElementById('detailsModalBody');
+  var selectedEntry = ''
+  for (var i = 0; i < entries.length; i++){
+    for (var j = 0; j < entries[i]["data"].length; j++){
+  if (id == entries[i]["data"][j].id)  {
+    selectedEntry = entries[i]["data"][j];
+  }
+
+modalBody.innerHTML = "<h5>Breakfast</h5><p>" + selectedEntry['breakfast'] + "</p>"
+                      + "<h5>Lunch</h5><p>" + selectedEntry['lunch'] + "</p>"
+                      + "<h5>Dinner</h5><p>" + selectedEntry['dinner'] + "</p>"
+                      + "<h5>Exercise Routine</h5><p>" + selectedEntry['exercise'] + "</p>";
+  }
 }
+}
+
 var todayButton = document.getElementById('todayButton');
 todayButton.addEventListener("click", getCurrentDate);
 var deleteUserButton = document.getElementById('deleteUserButton');

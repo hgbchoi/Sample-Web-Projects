@@ -10,10 +10,18 @@
   margin-top: 30px;
 }
 
+.modal-lg{
+  max-width:60%
+}
+
 .buttonMargin{
   margin-left:20px;
 }
 
 .jumbotron{
   padding-bottom: 15px;
+}
+
+canvas {
+  padding-bottom: 20px;
 }
