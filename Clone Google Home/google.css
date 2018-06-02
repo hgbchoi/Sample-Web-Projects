@@ -74,15 +74,12 @@ position:fixed;
 width: 100%;
 background:#eee;
 bottom: 0;
-
 }
 
 footer nav ul {
-
   float:left;
   padding-top:7px;
   padding-bottom:7px;
-
 }
 
 footer nav ul.footer-right{
