@@ -12,6 +12,7 @@ var usersList = JSON.parse(localStorage.getItem(TRACKER_USERS));
         newOption.value = usersList[i].name;
         dropDownList.appendChild(newOption)
   }
+  loadEntries();
 }
 
 
@@ -61,8 +62,10 @@ let lineChart = new Chart(chart, {
 function deleteUser(){
   var dropDownList = document.getElementById('userDropDown');
   var userToDelete = dropDownList.value;
-  localStorage.removeItem(userToDelete);
-
+  var entries = JSON.parse(localStorage.getItem(TRACKER_USERS));
+  var index= entries.findIndex(obj => obj.name == userToDelete);
+  entries.splice(index,1);
+  localStorage.setItem(TRACKER_USERS, JSON.stringify(entries));
   loadUsers();
 }
 
@@ -73,6 +76,9 @@ function saveEntry(){
   var issueId = chance.guid();
   var existsFlag = false;
 
+  if(name == '' || name == null, weight == '' || weight == null || date == '' || date == null){
+    alert('Please fill  in all fields');
+  }else{
   var newEntry = {
     name:name,
     "data":[{
@@ -109,19 +115,22 @@ function saveEntry(){
   }
 loadUsers();
 }
+}
 
 
 function loadEntries(){
   var table = document.getElementById('entryTable');
+  var entries = [];
+  var name = document.getElementById('userDropDown').value;
+  entries = JSON.parse(localStorage.getItem(TRACKER_USERS));
+  if (entries.length > 0){
   table.innerHTML = '<thead>'+
     '<th>Name</th>'+
     '<th>Weight</th>'+
     '<th>Date</th>'+
     '<th>Functions</th>' +
      '</thead>';
-  var entries = [];
-  var name = document.getElementById('userDropDown').value;
-  entries = JSON.parse(localStorage.getItem(TRACKER_USERS));
+
   var index= entries.findIndex(obj => obj.name == name);
   for (var i = 0; i < entries[index]["data"].length; i ++){
       var newRow = table.insertRow(table.length),
@@ -132,11 +141,13 @@ function loadEntries(){
       cell1.innerHTML = name;
       cell2.innerHTML = entries[index]['data'][i].weight;
       cell3.innerHTML = entries[index]['data'][i].date;
-      cell4.innerHTML = '<input type = "button" onclick="deleteEntry(\''+ entries[index]['data'][i].id +'\')" class="btn btn-danger" value = "Delete">';
-      cell4.innerHTML = '<input type = "button" onclick="deleteEntry(\''+ entries[index]['data'][i].id +'\')" class="btn btn-danger" value = "Delete">';
+      cell4.innerHTML = '<input type = "button" onclick="deleteEntry(\''+ entries[index]['data'][i].id +'\')" class="btn btn-danger" value = "Delete">'+
+                        '<input type = "button" onclick="displayDetails(\''+ entries[index]['data'][i].id +'\')" class="btn btn-primary buttonMargin" value = "Details">';
+
 
 }
 drawChart();
+}
 }
 
 
@@ -155,7 +166,16 @@ function deleteEntry(id){
   loadEntries();
 }
 
+function getCurrentDate(){
+  var dateField = document.getElementById('date');
+  dateField.value = moment().format("YYYY-MM-DD");
+}
 
+function displayDetails(id){
+
+}
+var todayButton = document.getElementById('todayButton');
+todayButton.addEventListener("click", getCurrentDate);
 var deleteUserButton = document.getElementById('deleteUserButton');
 deleteUserButton.addEventListener("click", deleteUser);
 var addEntriesButton = document.getElementById('addEntryButton');
